@@ -1,0 +1,34 @@
+extends ../layouts/main
+
+block title
+    | Объекты недвижимости
+
+block filter
+    include ../modules/filter
+
+block content
+    h1= Request::route()->getName() == 'sale' ? 'Продажа недвижимости' : 'Аренда недвижимости'
+    if $objects->isEmpty()
+        .card.blue.darken-1
+            .card-content.white-text По вашему запросу ничего не найдено.
+    else
+        .objects
+            each object in $objects
+                a.card.horizontal.hoverable(href=$object->url)
+                    span.card-image
+                        .image(style="background-image: url(".$object->thumb."); background-position: 0px;" alt="")
+                    span.card-content
+                        span.price= $object->print_price
+                        if $object->action == 2
+                            if $object->commission
+                                span.commission= 'Комиссия '.$object->commission.'%'
+                            if $object->deposit
+                                span.deposit= 'Залог '.$object->print_deposit
+                        span.name= $object->full_name
+                        span.description!= strip_tags(\Str::limit($object->description, 100, '...'))
+                        if $object->size
+                            span.size.grey-text= 'Площадь '.$object->size.' м'
+                                sup 2
+                        if $object->floor
+                            span.floor.grey-text= 'Этаж '.$object->floor
+            != $objects->appends(Request::all())->links('modules.pagination')

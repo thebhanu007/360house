@@ -1,0 +1,236 @@
+extends ../layouts/main
+
+block title
+    | Добавить объект
+
+block content
+    h1 Создать объявление
+    if $errors->any()
+        .errors.card.red.white-text
+            .card-content
+                each error in $errors->all()
+                    .error= $error
+    form.objects-form(method="POST" enctype="multipart/form-data" action=isset($object) ? route('object.edit', ['id' => $object->id]) : route('object.create'))
+        != csrf_field()
+        input(type="hidden" name="object_id" value=old('object_id') ? old('object_id') : (isset($object) ? $object->id : ''))
+        //- if isset($object) && $object->paid_scenes > 0
+        //-     .card.blue.white-text
+        //-         .card-content Кол-во оплаченных панорам у данного объявления: #[strong= $object->paid_scenes]
+        .row
+            .col.s12.ngp
+                .card.tour
+                    .ripple Обработка...
+                    .card-content
+                        .card-title Выбирите тип панорамы для загрузки
+                        .row
+                            .col.s12.l4
+                                input#type-2.with-gap(name="scene_type" type="radio" value="2" checked=old('scene_type') ? old('scene_type') == 2 : (isset($object) && $object->scene_type == 2) || !isset($object))
+                                label(for="type-2") Панорама 360
+                                    .tooltip ?
+                                        .tooltip-content.z-depth-3 
+                                            img(src=url('images/example-1.jpg'))
+                                            | Сферическая панорама эквидистантной проекции - картинка, необходимая для создания 3D-туров. Её можно получить из нескольких кадров изображения, в дальнейшем склеиных через специальное програмное обеспечение, а также с помощью камер, которые  могут снимать 360 градусов сразу.
+                            .col.s12.l4
+                                input#type-3.with-gap(name="scene_type" type="radio" value="3" checked=old('scene_type') ? old('scene_type') == 3 : (isset($object) && $object->scene_type == 3))
+                                label(for="type-3") Панорама Fisheye
+                                    .tooltip ?
+                                        .tooltip-content.z-depth-3 
+                                            img(src=url('images/example-2.jpg'))
+                                            | Циркулярный фишай (так называемый рыбий глаз) - изображение занимает не всю его площадь, а лишь вписанный круг с углом обзора ~180, в нашем случае в одной картинке находятся два циркулярных фишая из которых нами созданный конвертор автоматически перелает картинку в полноценную сферическую панораму.
+                            .col.s12.l4
+                                input#type-1.with-gap(name="scene_type" type="radio" value="1" checked=old('scene_type') ? old('scene_type') == 1 : ((isset($object) && $object->scene_type == 1)))
+                                label(for="type-1") Панорамы с мобильных устройств 
+                                    .tooltip ?
+                                        .tooltip-content.z-depth-3 
+                                            img(src=url('images/example-3.jpg'))
+                                            | Панорама сделанная с смарфтона или планшета. Хотим обратить внимание, что качество съемки и углы захвата изображения у данных устройств как правило хуже чем у зеркальных камер и камер специально предначначенных для 360-ти градусной съемки.
+                        .row.sceneform
+                            .col.s12.l3
+                                table.bordered
+                                    tbody
+                                        tr.pattern.scene
+                                            td
+                                                i.material-icons.delete(title="Удалить") highlight_off
+                                                a(href="#" data-scene="0" class="clearfix")
+                                                    i.icon.material-icons insert_photo
+                                                    .name
+                                        if isset($object)
+                                            each scene, i in $object->scenes
+                                                tr.scene
+                                                    td
+                                                        i.material-icons.delete(title="Удалить") highlight_off
+                                                        a(href="#" class="clearfix" data-scene=($i + 1))
+                                                            i.icon.material-icons insert_photo
+                                                            .name= $scene->name
+                                        tr.mark.pattern
+                                            td
+                                                i.material-icons.delete(title="Удалить") highlight_off
+                                                a(href="#" data-mark="0" class="clearfix")
+                                                    i.icon.material-icons location_on
+                                                    .name
+                                        if isset($object)
+                                            each mark, i in $object->marks
+                                                tr.mark
+                                                    td
+                                                        i.material-icons.delete(title="Удалить") highlight_off
+                                                        a(href="#" data-mark=($i + 1) class="clearfix")
+                                                            i.icon.material-icons location_on
+                                                            .name= $mark->from_scene_name.' - '.$mark->to_scene_name
+                            .col.s12.l9
+                                .scene-edit.pattern(data-id="0")
+                                    .input-field.col.s12
+                                        input#name(name="name" type="text")
+                                        label(for="name") Название
+                                    .input-field.file-field.col.s12
+                                        .btn
+                                            span Загрузить изображение
+                                            input#tour(name="tour" type="file")
+                                        .file-path-wrapper
+                                            input.file-path(type="text")
+                                    .col.s12.preview
+                                    input(name="scene_id" value="" type="hidden")
+                                if isset($object)
+                                    each scene, i in $object->scenes
+                                        .scene-edit(data-id=($i + 1))
+                                            .input-field.col.s12
+                                                input(name="name[".($i + 1)."]" type="text" value=$scene->name id="name-".($i + 1))
+                                                label(for="name-".($i + 1)) Название
+                                            .input-field.file-field.col.s12
+                                                .btn
+                                                    span Загрузить изображение
+                                                    input(name="tour[".($i + 1)."]" type="file" id="tour-".($i + 1))
+                                                .file-path-wrapper
+                                                    input.file-path(type="text")
+                                            .col.s12.preview
+                                                .pano(data-src=$scene->image_url id='scene-'.($i + 1) data-width=($scene->image_width) data-height=($scene->image_height))
+                                            input(name="scene_id[".($i + 1)."]" value=$scene->id type="hidden")
+                                .mark-edit.pattern(data-id="0")
+                                    .input-field.col.s12
+                                        select#from(name="from")
+                                        label(for="from") Из панорамы
+                                        input(type="hidden" name="from_pitch" value="0")
+                                        input(type="hidden" name="from_yaw" value="0")
+                                        input(type="hidden" name="from_offset" value="50")
+                                    .col.s12.preview
+                                    .input-field.col.s12
+                                        select#to(name="to")
+                                        label(for="to") В панораму
+                                        input(type="hidden" name="to_pitch" value="0")
+                                        input(type="hidden" name="to_yaw" value="0")
+                                        input(type="hidden" name="to_offset" value="50")
+                                    .col.s12.preview
+                                if isset($object)
+                                    each mark, i in $object->marks
+                                        .mark-edit(data-id=($i + 1))
+                                            .input-field.col.s12
+                                                select(name="from[".($i + 1)."]" id="from-".($i + 1))
+                                                    each scene, k in $object->scenes
+                                                        option(value=($scene->id) selected=$scene->id == $mark->from_scene)= $scene->name
+                                                label(for="from-".($i + 1)) Из панорамы
+                                                input(type="hidden" name="from_pitch[".($i + 1)."]" value=$mark->from_pitch)
+                                                input(type="hidden" name="from_yaw[".($i + 1)."]" value=$mark->from_yaw)
+                                                input(type="hidden" name="from_offset[".($i + 1)."]" value=$mark->from_offset)
+                                            .col.s12.preview
+                                                .pano(data-src=($mark->fromScene->image_url) data-width=($mark->fromScene->image_width) data-height=($mark->fromScene->image_height) id='scene-'.$i)
+                                            .input-field.col.s12
+                                                select(name="to[".($i + 1)."]" id="to-".($i + 1))
+                                                    each scene, k in $object->scenes
+                                                        option(value=$scene->id selected=$scene->id == $mark->to_scene)= $scene->name
+                                                label(for="to-".($i + 1)) В панораму
+                                                input(type="hidden" name="to_pitch[".($i + 1)."]" value=$mark->to_pitch)
+                                                input(type="hidden" name="to_yaw[".($i + 1)."]" value=$mark->to_yaw)
+                                                input(type="hidden" name="to_offset[".($i + 1)."]" value=$mark->to_offset)
+                                            .col.s12.preview
+                                                .pano(data-src=($mark->toScene->image_url) id=('scene-'.$i) data-width=($mark->toScene->image_width) data-height=($mark->toScene->image_height))
+                                            input(name="mark_id[".($i + 1)."]" value=($mark->id) type="hidden")
+                    .card-action.vp25
+                        a.add-scene(href="#") Добавить сцену
+                        a.add-mark(href="#" style=(isset($object) && $object->scenes->count() > 1 ? '' : 'display: none')) Добавить переход
+                        a.btn.waves-effect.waves-light.blue(style="float: right; margin-top: -7px;" href="/education" target="_blank") Инструкция по созданию тура
+                .input-field.col.m2.s6.pointer(onclick="add_document_click()")
+                    br
+                    br
+                    label#loading(for="documents" onclick="add_document_click()") Добавить документы
+                <div class="input-field col m12 files_list_block"><?php if(old('image')){ $images = explode(",", old('image')); foreach($images as $key => $image){ if($key != 0){ echo '<div class="product-images" id="image-'.$key.'" style="float:left;"><img src="http://360house.ru/documents/'.$image.'" class="img-thumbnail" height="70" width="70" style="margin-right:10px; border:1px solid #ccc;"><button class="btn-remove btn-success" type="button" value="'.$image.'" data-id="image-'.$key.'">X</button></div>';}}}else{ echo $img_src;}?></div>
+                input#documents(name="documents[]" type="file" style="display: none" multiple="multiple")
+                <input id="documents_hidden" name="image" type="hidden" value="<?php echo old('image') ? old('image') : (isset($object) ? $object->image : '');?>">
+                <input id="total_images" name="total_images" type="hidden" value="<?php echo old('total_images') ? old('total_images') : (isset($img_count) ? $img_count : 0);?>">
+
+
+            .input-field.col.s12.ngp
+                select#type(name="action")
+                    option(value="") Выбрать тип объявления...
+                    option(value="1" selected=old('action') ? old('action') == 1 : (isset($object) ? $object->action == 1 : false)) Продажа
+                    option(value="2" selected=old('action') ? old('action') == 2 : (isset($object) ? $object->action == 2 : false)) Аренда
+                    option(value="3" selected=old('action') ? old('action') == 3 : (isset($object) ? $object->action == 3 : false)) Панорама для интеграции на сайт
+                label(for="type") Тип объявления
+            .type.type-1.type-2.nockeditor
+                .input-field.col.s12 Описание
+                    textarea#description.materialize-textarea(name="description")= old('description') ? old('description') : (isset($object) ? $object->description : '')
+                .input-field.col.m3.s12
+                    input#price(name="price" type="text" value=old('price') ? old('price') : (isset($object) ? $object->price : ''))
+                    label(for="price") Цена (руб.)
+                .input-field.col.m3.s12
+                    input#size(name="size" type="text" value=old('size') ? old('size') : (isset($object) ? $object->size : ''))
+                    label(for="size") Площадь (м3)
+                .input-field.col.m3.s12
+                    input#rooms(name="rooms" type="text" value=old('rooms') ? old('rooms') : (isset($object) ? $object->rooms : ''))
+                    label(for="rooms") Кол-во комнат
+                .input-field.col.m3.s12
+                    input#phone(name="phone" type="text" value=old('phone') ? old('phone') : (isset($object) ? $object->phone : ''))
+                    label(for="phone") Номер телефона
+                .input-field.col.m3.s12
+                    select#type(name="type")
+                        option(value="") Выбрать тип объекта...
+                        each type, id in \App\ObjectNew::getTypes()
+                            option(value=$id selected=old('type') ? old('type') == $id : (isset($object) ? $object->type == $id : false))= $type
+                    label(for="type") Тип объекта
+                .type.type-2
+                    .input-field.col.m3.s12
+                        select#duration(name="duration")
+                            option(value="") Выбрать...
+                            each duration, id in \App\ObjectNew::getDuration()
+                                option(value=$id selected=old('duration') ? old('duration') == $id : (isset($object) ? $object->duration == $id : false))= $duration
+                        label(for="duration") Вид аренды
+                .input-field.col.m3.s12
+                    select#material(name="material")
+                        option(value="") Выбрать...
+                        each material, id in \App\ObjectNew::getMaterials()
+                            option(value=$id selected=old('material') ? old('material') == $id : (isset($object) ? $object->material == $id : false))= $material
+                    label(for="material") Материал здания
+                .input-field.col.m3.s6
+                    input#floor(name="floor" type="text" value=old('floor') ? old('floor') : (isset($object) ? $object->floor : ''))
+                    label(for="floor") Этаж
+                .input-field.col.m3.s6
+                    input#floors(name="floors" type="text" value=old('floors') ? old('floors') : (isset($object) ? $object->floors : ''))
+                    label(for="floors") Этажность
+                .type.type-2
+                    .input-field.col.m4.s12
+                        input#commission(name="commission" type="text" value=old('commission') ? old('commission') : (isset($object) ? $object->commission : ''))
+                        label(for="commission") Комиссия (%)
+                    .input-field.col.m4.s12
+                        input#deposit(name="deposit" type="text" value=old('deposit') ? old('deposit') : (isset($object) ? $object->deposit : ''))
+                        label(for="deposit") Залог (руб.)
+                #map.col.s12
+                input#latitude(type="hidden" value=old('latitude') ? old('latitude') : (isset($object) ? $object->latitude : '') name="latitude")
+                input#longitude(type="hidden" value=old('longitude') ? old('longitude') : (isset($object) ? $object->longitude : '') name="longitude")
+            if (isset($object))
+                .type.type-1.type-2.type-3.checkbox-wrapper.clearfix
+                    p
+                        input#active.filled-in(type="checkbox" name="active" checked=$object->active == 1)
+                        label(for="active") Отображать объявление на сайте
+        .row
+            .card
+                .card-content
+                    h5 Стоимость: 
+                        if isset($object) && $object->unpaid_scenes > 0
+                            strong.cost= $object->unpaid_scenes * ENV('SCENE_COST').' руб.'
+                        else
+                            strong.cost бесплатно
+                    .paid-scenes У вас #[strong= Auth::user()->paid_scenes] оплаченных панорам.
+        .row.center
+            button.btn.waves-effect.waves-light.blue(type="submit") Сохранить
+    script(src=url('js/map.js'))
+    script(src=url('js/tours.js'))
+    //script
+    //    | CKEDITOR.replace('description');

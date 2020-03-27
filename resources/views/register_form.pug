@@ -1,0 +1,9 @@
+extends layouts/main
+
+block title
+    =isset($user) ? 'Изменить данные' : 'Регистрация'
+block h1
+    =isset($user) ? 'Изменить данные' : 'Регистрация'
+
+block content
+    include modules/user_form

@@ -1,0 +1,30 @@
+extends ../layouts/main
+
+block title
+    | Пользователи
+
+block content
+    table.striped.admin-users
+        thead
+            th ID
+            th Логин
+            th E-mail
+            th Имя
+            th 
+        tbody
+            each user in $users
+                tr
+                    td= $user->id
+                    td= $user->login
+                    td= $user->email
+                    td= $user->name
+                    td.right-align.actions
+                        a.btn-floating.blue.waves-effect.waves-light(href=route('admin.users.edit', ['id' => $user->id]) title="Изменить"): i.material-icons mode_edit
+                        form(method="POST" action=route('admin.users.destroy', ['id' => $user->id]))
+                            != csrf_field()
+                            input(type="hidden" name="_method" value="DELETE")
+                            button.btn-floating.waves-effect.waves-light.red(title="Удалить"): i.material-icons delete
+            tr
+                td.right-align(colspan="5")
+                    a.btn.blue.waves-effect.waves-light(href=route('admin.users.create')) Создать
+    != $users->links('modules.pagination')

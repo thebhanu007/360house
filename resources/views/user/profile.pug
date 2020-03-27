@@ -1,0 +1,12 @@
+extends ../layouts/main
+
+block title
+    | Изменить данные
+block h1
+    | Изменить данные
+
+block content
+    if (isset($user))
+        .card.blue.white-text
+            .card-content Кол-во оплаченных панорам: #[strong= $user->paid_scenes]
+    include ../modules/user_form

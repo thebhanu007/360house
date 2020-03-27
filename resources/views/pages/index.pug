@@ -1,0 +1,35 @@
+extends ../layouts/main
+
+block title
+    | Кругом Дом
+
+block filter
+    include ../modules/filter
+
+block content
+    .first-site.center Первый в России сайт по самостоятельному созданию виртуальных туров для продажи и аренды недвижимости.
+    .tutorial
+        #tutorial.modal
+            .modal-content
+                iframe(width="560" height="315" src="https://www.youtube.com/embed/HYzI8ZMNdxc" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen)
+        a.waves-effect.waves-light.btn-large.tutorial-button.modal-trigger(href="#tutorial") Инструкция по созданию тура
+    #map
+    script(src=url('js/objectsMap.js'))
+    .main-text.card
+        .card-content!= \App\Option::get('main_text')
+    include ../modules/new_objects
+    .news
+        h4 Новости недвижимости
+        each item, i in $news->take(6)
+            if i % 2 == 0
+                | <div class="row">
+            .item.col.s12.l6
+                .card
+                    .card-content
+                        .card-title= $item->title
+                        .date= date('d.m.Y H:i', strtotime($item->pubDate))
+                        p= $item->description
+                    .card-action
+                        a(href=$item->link target="_blank") Подробнее
+            if i % 2 == 1
+                | </div>

@@ -1,0 +1,322 @@
+body { display: flex; min-height: 100vh; flex-direction: column; }
+main { flex: 1 0 auto; }
+
+.clearfix::after { content: ''; clear: both; display: block; }
+
+h1 { font-size: 32px; font-weight: 300 }
+h1.no-margin { margin-top: 0; }
+
+header .partner-button { background: #2E7D32 }
+header .partner-button:hover { background: #41A546 }
+
+.brand-logo { height: 80%; width: 200px; background: url(../images/logo_w.png) left center/contain no-repeat; margin-top: 6px; }
+
+#map { width: 100%; height: 50vh; }
+
+.object-card { display: block; }
+.object-card .card-content { padding: 8px; }
+.object-card { color: inherit; }
+.object-card span { display: block; }
+.object-card .price { font-weight: 600; }
+.object-card .rooms { font-size: 12px; }
+.object-card .image { background-size: cover; }
+
+.new-objects .row { margin: 0; }
+.new-objects .row .owl-item .col { width: 100%; }
+.new-objects .owl-nav div { position: absolute; top: 0; bottom: 0; height: 60px; margin: auto; }
+.new-objects .owl-nav div i { font-size: 60px; }
+.new-objects .owl-nav div.disabled { opacity: .2; cursor: default; }
+.new-objects .owl-prev { left: -60px; }
+.new-objects .owl-next { right: -60px; }
+
+.page-footer .brand-logo { height: 50px; display: inline-block; margin: 0;  }
+.page-footer .social a { margin-right: 10px; }
+.page-footer .mail { display: inline-block; margin-left: 30px; }
+.page-footer .mail .btn-floating { margin-right: 10px; vertical-align: middle; }
+.page-footer .payment-logos img { max-height: 50px; vertical-align: middle; margin: 0 5px; }
+.page-footer .payment-logos .visa { max-height: 25px; }
+.page-footer .payment-logos .mir { max-height: 20px; }
+
+.objects a { color: inherit; }
+.objects .card-content > span { display: block; margin-bottom: 6px; }
+.objects a .price, .object > .price { font-size: 32px; font-weight: 600; line-height: 1; }
+.objects a .commission, .objects a .deposit, .objects a .floor, .objects a .size { display: inline-block; margin-right: 10px; }
+.objects a .name { font-size: 18px; font-weight: 500; }
+.objects a .description { font-weight: 300; }
+.objects .card.horizontal .card-image { width: 30%; overflow: hidden; max-width: 300px; }
+.objects .card.horizontal .card-image .image { background-size: cover; }
+.objects a .floor, .objects a .size { font-size: 13px; }
+
+.admin-objects form, .admin-users form { display: inline-block; margin: 0; }
+.admin-objects .actions, .admin-users .actions { width: 15%; }
+.admin-objects .actions a, .admin-objects .actions button, .admin-users .actions a, .admin-users .actions button { margin-left: 6px; }
+.admin-objects .embed-code { display: none; font-size: 14px; font-weight: 100 }
+
+.main-text .card-content p { margin: 1em 0; }
+.main-text img { margin: auto; display: block; }
+
+.object.embed .row { margin: 0; }
+.object.embed #tour { margin: 0; }
+
+.object > .price { line-height: normal; margin-bottom: 10px; }
+.object #tour { position: relative; width: 100%; margin: 15px 0; }
+.object #tour .fullscreen { position: absolute; top: 8px; right: 20px; }
+.object #tour .fullscreen i { color: #fff; text-shadow: 0 0 5px rgba(0, 0, 0, .3); }
+.object #tour .fullscreen i::before { margin: 0; font-size: 40px; }
+.object #tour iframe { border: 0; height: 100%; width: 100%; }
+.object #tour::before { display: none; position: absolute; background: url(../images/logo_eng.png) center no-repeat; width: 100px; bottom: 5px; right: 15px; content: ''; z-index: 1; height: 94px; background-size: contain; }
+.is-fullscreen .object #tour { height: 100%; margin: 0; padding: 0; }
+.object h5 { font-weight: 500; font-size: 28px; margin-bottom: 10px; }
+.object .description { margin-bottom: 15px; }
+.object .info { font-weight: 500; }
+.object .info .value { font-weight: 300; }
+.object #map { margin-top: 15px; }
+.object .phone a { margin-left: 15px; }
+.object #pano { overflow: hidden; position: relative; height: 100%; }
+.object #pano .pnlm-hotspot, .object #pano .mark { background: url(../images/arrow.png) center no-repeat; width: 100px; height: 100px; background-size: contain; }
+.object #pano .mark { position: absolute; top: 0; bottom: 0; margin: auto; cursor: pointer; }
+.object .edit { margin-right: 10px; }
+
+.objects-form #map { margin-bottom: 15px; }
+.objects-form .tour { position: relative; }
+.objects-form .tour .type:not([for]) { cursor: not-allowed; }
+.objects-form .tour .ripple { position: absolute; top: 0; bottom: 0; right: 0; left: 0; background: rgba(255, 255, 255, .9); z-index: 10; text-align: center; font-size: 30px; font-weight: 100; display: none; }
+.objects-form .tour .ripple::before { display: inline-block; vertical-align: middle; content: ''; height: 100%; } 
+.objects-form .tour .ripple::after { display: inline-block; vertical-align: middle; content: url(../images/ripple.gif); }
+.objects-form .tour .scene td, .objects-form .tour .mark td { position: relative; }
+.objects-form .tour .scene a, .objects-form .tour .mark a { display: block; color: inherit; }
+.objects-form .tour .scene .icon, .objects-form .tour .mark .icon { max-width: 40px; max-height: 40px; margin: 0 10px 0 0; display: inline-block; font-size: 40px; vertical-align: middle; }
+.objects-form .tour .scene .delete, .objects-form .tour .mark .delete { position: absolute; color: #f00; right: 0; top: 0; cursor: pointer; bottom: 0; height: 24px; margin: auto; }
+.objects-form .tour .scene a.active, .objects-form .tour .mark a.active { color: #26a69a; }
+.objects-form .tour .scene .name, .objects-form .tour .mark .name { display: inline-block; vertical-align: middle; }
+.objects-form .tour .pattern { display: none; }
+.objects-form .tour .scene-edit, .objects-form .tour .mark-edit { display: none; }
+.objects-form .tour .scene-edit.active, .objects-form .tour .mark-edit.active { display: block; }
+.objects-form .preview .pano { position: relative; width: 100%; }
+.objects-form .mark-edit .preview .pano::after { position: absolute; top: 0; bottom: 0; left: 0; right: 0; margin: auto; height: 40px; width: 40px; background: url(../images/arrow.png) center no-repeat; background-size: contain; content: ''; }
+.objects-form .tooltip { position: absolute; top: -15px; right: -23px; width: 20px; height: 20px; border: 1px solid; border-radius: 50%; text-align: center; line-height: 20px; transition: all border-color .3s; cursor: default; }
+.objects-form .tooltip:hover { border-color: #2196F3; }
+.objects-form .tooltip-content { display: none; position: absolute; top: 20px; left: 20px; padding: 15px; z-index: 10; width: 400px; background: #fff; text-align: left; font-size: 14px; }
+.objects-form .tooltip-content img { max-width: 100%; margin-bottom: 10px; }
+.objects-form .tooltip:hover .tooltip-content { display: block; }
+.objects-form .card-title { margin-bottom: 25px !important; }
+.objects-form .paid-scenes { font-weight: 300; }
+
+.card .card-content { padding: 15px; }
+input:not([type]), input[type=text]:not(.browser-default), input[type=password]:not(.browser-default), input[type=email]:not(.browser-default), input[type=url]:not(.browser-default), input[type=time]:not(.browser-default), input[type=date]:not(.browser-default), input[type=datetime]:not(.browser-default), input[type=datetime-local]:not(.browser-default), input[type=tel]:not(.browser-default), input[type=number]:not(.browser-default), input[type=search]:not(.browser-default), textarea.materialize-textarea { margin-bottom: 10px; height: 2.5rem }
+
+.filter-wrapper { padding-top: 20px; background-image: url(../images/filter-bg.jpg); background-size: auto 700px; background-position: center -50px; background-attachment: fixed; }
+.filter .autocomplete-content { margin-top: -10px; margin-bottom: 10px; position: absolute; width: 100%; box-sizing: border-box; }
+.filter .autocomplete-content * { box-sizing: border-box; }
+
+.checkbox { margin-top: 1rem; height: 2.5rem; margin-bottom: 11px; }
+.checkbox-wrapper { padding: 0 .75rem; min-height: 1px; }
+
+.g-recaptcha { display: inline-block; margin-bottom: 10px; }
+
+.tutorial { text-align: center; }
+#tutorial { width: 608px; }
+.tutorial-button { margin-bottom: 20px; font-size: 20px; }
+
+.help img { max-width: 100%; margin: 10px 0; }
+.help .content { display: none; margin-top: 10px; }
+.help .toggle { cursor: pointer; display: inline-block; }
+.help .toggle:hover { text-decoration: underline; }
+
+.packs .amount { font-weight: 600; margin-bottom: 10px }
+.packs .price { font-weight: 300; }
+
+.news .item { padding: 0 10px }
+.news .item .card-title { font-size: 18px; font-weight: normal; line-height: 24px }
+.news .item p { font-weight: 300; }
+.news .item .date { font-size: 12px; font-weight: 100; margin-bottom: 5px; }
+
+.first-site { font-weight: 300; font-size: 20px; padding: 0 0 15px }
+
+.feedback iframe { display: block; margin: 0 auto 15px; max-width: 100%; }
+.feedback form { margin-top: 30px; }
+.feedback form > .card-content { padding: 0; }
+
+#order-form { max-width: 700px }
+#report-form { max-width: 500px }
+
+@media (max-width: 1200px) {
+    nav ul a { font-size: 13px; padding: 0 7px; }
+}
+
+@media (max-width: 992px) {
+    .tutorial-button { font-size: 12px; }
+    nav .brand-logo {  background-position: center; }
+
+    .feedback iframe { width: 420; height: 252px; }
+}
+
+@media (max-width: 600px) {
+    .brand-logo { background-position: center }
+    .page-footer { text-align: center; }
+    .page-footer .social { margin-top: 10px; }
+    .page-footer .social a { margin: 0 5px; }
+    .page-footer .payment-logos { text-align: center; }
+    .objects .card .card-content { max-width: 70%; padding: 10px; }
+    .objects a .price { font-size: 20px; }
+    .objects a .commission, .objects a .deposit, .objects a .floor, .objects a .size { font-size: 11px; margin-right: 6px; }
+    .objects a .name { font-size: 14px; }
+    .object #pano .mark { width: 30px; height: 30px; }
+    .page-footer .mail { display: block; margin-left: 0px; margin-top: 10px; }
+}
+
+.nockeditor #description {
+    border: 1px solid #afafaf;
+    border-radius: 3px;
+}
+
+form.objects-form .card.tour .card-content {
+	padding-top: unset; 
+	padding-bottom: unset;
+}
+form.objects-form .card.tour .card-content .card-title{
+	display: none
+}
+form.objects-form .card.tour .card-content .row{
+	display: none
+}
+form.objects-form .card.tour .card-content .row.sceneform{
+	display: block;
+	margin-bottom: unset;
+}
+form.objects-form .card.tour .card-content .row.sceneform .scene-edit.active{
+	padding-top: 15px;
+}
+.ngp {
+    padding-left: unset !important;
+    padding-right: unset !important;
+}
+.vp25{
+	padding-top: 25px !important;
+    padding-bottom: 25px !important;	
+}
+.files_list_block i{
+	margin-right: 5px;
+}
+
+.popupimages{
+	display:none;
+}
+#myImg {
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#myImg:hover {opacity: 0.7;}
+
+/* The Modal (background) */
+#myImageModal.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0 !important;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: transparent; /* Fallback color */
+  max-height:100% !important;
+  box-shadow: none !important;
+  text-align: center;
+  /*align-items: center;
+  justify-content: center;*/
+}
+#myImageModal.modal.open{
+  /*display: flex!important;*/
+}
+/* Modal Content (Image) */
+#myImageModal .modal-content {
+  margin: auto;
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 75%;
+  max-height: 75%;
+  padding: 0 !important;
+  margin:auto;
+}
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+#myImageModal .modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+/* Caption of Modal Image (Image Text) - Same Width as the Image */
+ #myImageModal #caption {
+  margin: auto;
+  display: block;
+  width: 80%;
+  max-width: 700px;
+  text-align: center;
+  color: #ccc;
+  padding: 10px 0;
+  height: 150px;
+}
+
+/* Add Animation - Zoom in the Modal */
+#myImageModal .modal-content, #caption {
+  animation-name: zoom;
+  animation-duration: 0.6s;
+}
+
+@keyframes zoom {
+  from {transform:scale(0)}
+  to {transform:scale(1)}
+}
+
+/* The Close Button */
+#myImageModal .close {
+  position: absolute;
+  top: 0px;
+  right: 50px;
+  color: #f1f1f1;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+#myImageModal .close:hover,
+#myImageModal .close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+.input-field.col.m12.files_list_block {
+    padding-bottom: 15px;
+}
+
+button.btn-remove.btn-success {
+    position: relative;
+    top: -55px;
+    left: -28px;
+    font-size: 12px;
+    background: #ff4242;
+    border-color: #ff4242;
+    color: #ffffff;
+    padding: 0px 3px;
+}
+
+/* 100% Image Width on Smaller Screens */
+@media only screen and (max-width: 700px){
+  .modal-content {
+    width: 100%;
+  }
+}
+
+.pointer{
+  cursor: pointer;
+}

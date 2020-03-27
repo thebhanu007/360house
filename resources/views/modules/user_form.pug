@@ -1,0 +1,39 @@
+.row
+    if $errors->any()
+        .errors.card.red.white-text
+            .card-content
+                each error in $errors->all()
+                    .error= $error
+    form.register-form.col.s12.m8.offset-m2.card(method="POST" action=isset($admin) ? (isset($user) ? route('admin.users.update', ['id' => $user->id]) : route('admin.users.store')) : '')
+        .card-content
+            != csrf_field()
+            if (isset($admin) && isset($user))
+                input(type="hidden" name="_method" value="PUT")
+            .row
+                .input-field.col.s12.m4
+                    input#login(name="login" type="text" value=old('login') ? old('login') : (isset($user) ? $user->login : ''))
+                    label(for="login") Логин
+                .input-field.col.s12.m4
+                    input#email(name="email" type="text" value=old('email') ? old('email') : (isset($user) ? $user->email : ''))
+                    label(for="email") E-mail
+                .input-field.col.s12.m4
+                    input#phone(name="phone" type="text" value=old('phone') ? old('phone') : (isset($user) ? $user->phone : ''))
+                    label(for="phone") Телефон
+                .input-field.col.s12.m12
+                    input#name(name="name" type="text" value=old('name') ? old('name') : (isset($user) ? $user->name : ''))
+                    label(for="name") Имя
+                .input-field.col.s12.m6
+                    input#password(name="password" type="password")
+                    label(for="password") Пароль
+                .input-field.col.s12.m6
+                    input#password-repeat(name="password_repeat" type="password")
+                    label(for="password-repeat") Повторите пароль
+                .col.s12.m12.checkbox
+                    input#personal(type="checkbox" name="personal" value="on" checked=Request::has('personal'))
+                    label(for="personal") Я даю свое согласие на обработку персональных данных
+					
+                //if !isset($user) && !isset($admin)
+                //    .clearfix.center-align
+                //        .g-recaptcha(data-sitekey="6LeVQDIUAAAAAPwLSpa9psmjIZ5mPpDW3qn-Sk6p")
+                .center
+                    button.btn.waves-effect.waves-light.blue(type="submit")= !isset($user) ? 'Регистрация' : 'Сохранить'

@@ -1,0 +1,83 @@
+.filter-wrapper
+    .container
+        form.card.filter(action=(Request::route()->getName() == 'rent' ? route('rent') : route('sale')) method="GET")
+            .row
+                .col.s12
+                    ul.tabs
+                        li.tab.col.m2.s6.sale-tab: a(href="#" class=(Request::route()->getName() == 'sale' ? 'active' : '') data-route=route('sale')) Продажа
+                        li.tab.col.m2.s6.rent-tab: a(href="#" class=(Request::route()->getName() == 'rent' ? 'active' : '') data-route=route('rent')) Аренда
+                .card-content.clearfix
+                    .col.input-field.m4.s12
+                        select#region(name="region")
+                            option(value="") Выбрать регион...
+                            each region in $regions
+                                option(value=$region->id selected=(Request::input('region') == $region->id))= $region->name
+                    .col.input-field.m8.s12
+                        input#city(type="text" name="city" value=Request::input('city'))
+                        label(for="city") Город
+                    .col.input-field.m2.s6
+                        select#type(name="type")
+                            option(value="") Тип недвижимости...
+                            each type, id in \App\ObjectNew::getTypes()
+                                option(value=$id selected=(Request::input('type') == $id))= $type
+                    .col.input-field.m3.s6.rooms
+                        select#rooms(multiple name="rooms[]")
+                            option(value="" disabled) Количество комнат...
+                            each amount, id in \App\ObjectNew::getRooms()
+                                option(selected=(in_array($id, Request::input('rooms', []))) value=$id)= $amount
+                    .col.input-field.m3.s12.duration(data-tab="rent")
+                        select#duration(name="duration")
+                            option(value="") Срок аренды...
+                            each duration, id in \App\ObjectNew::getDuration()
+                                option(value=$id selected=(Request::input('duration') == $id))= $duration
+                    .col.input-field.m3.s12.material
+                        select#material(name="material")
+                            option(value='' selected=(!Request::has('material'))) Материал здания...
+                            each material, id in \App\ObjectNew::getMaterials()
+                                option(value=$id selected=(Request::input('material') == $id))= $material
+                    .clearfix
+                        .col.input-field.m2.s6
+                            input#from(type="text" name="price[from]" value=Request::input('price.from'))
+                            label(for="from") Цена от
+                        .col.input-field.m2.s6
+                            input#to(type="text" name="price[to]" value=Request::input('price.to'))
+                            label(for="to") Цена до
+                        .col.m2.s12.checkbox(data-tab="rent")
+                            input#no-deposit(type="checkbox" name="no_deposit" value="on" checked=Request::has('no_deposit'))
+                            label(for="no-deposit") Без залога
+                        .col.m2.s12.checkbox(data-tab="rent")
+                            input#no-commission(type="checkbox" name="no_commission" value="on" checked=Request::has('no_commission'))
+                            label(for="no-commission") Без комиссии
+                        .col.input-field.m2.s6
+                            input#size-from(type="text" name="size[from]" value=Request::input('size.from'))
+                            label(for="size-from") Площадь от (м#[sup 3])
+                        .col.input-field.m2.s6
+                            input#size-to(type="text" name="size[to]" value=Request::input('size.to'))
+                            label(for="size-to") Площадь до (м#[sup 3])
+                    .clearfix
+                        .col.input-field.m2.s6
+                            input#floor-from(type="text" name="floor[from]" value=Request::input('floor.from'))
+                            label(for="floor-from") Этаж от
+                        .col.input-field.m2.s6
+                            input#floor-to(type="text" name="floor[to]" value=Request::input('floor.to'))
+                            label(for="floor-to") Этаж до
+                        .col.input-field.m2.s6
+                            input#floors-from(type="text" name="floors[from]" value=Request::input('floors.from'))
+                            label(for="floors-from") Этажность от
+                        .col.input-field.m2.s6
+                            input#floors-to(type="text" name="floors[to]" value=Request::input('floors.to'))
+                            label(for="floors-to") Этажность до
+                        .col.m2.s12.checkbox
+                            input#not-last(type="checkbox" name="not_last" value="on" checked=Request::has('not_last'))
+                            label(for="not-last") Не последний этаж
+                    .col.input-field.m4.s12
+                        select#sort(name="sort")
+                            option(value="") Сортировать...
+                            option(value="price|asc" selected=Request::input('sort') == 'price|asc') Цена - по возрастанию
+                            option(value="price|desc" selected=Request::input('sort') == 'price|desc') Цена - по убыванию
+                            option(value="created_at|asc" selected=Request::input('sort') == 'created_at|asc') Дата - по возрастанию
+                            option(value="created_at|desc" selected=Request::input('sort') == 'created_at|desc') Дата - по убыванию
+                            option(value="size|asc" selected=Request::input('sort') == 'size|asc') Площадь - по возрастанию
+                            option(value="size|desc" selected=Request::input('sort') == 'size|desc') Площадь - по убыванию
+                    .col.input-field.m8.s12.right-align
+                        button.blue.btn.waves-effect.waves-light(type="submit") Найти

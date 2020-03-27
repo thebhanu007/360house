@@ -1,0 +1,25 @@
+if $paginator->hasPages()
+    ul.pagination
+        if $paginator->onFirstPage()
+            li.disabled
+                a(href="#!"): i.material-icons chevron_left
+        else
+            li.waves-effect
+                a(href=$paginator->previousPageUrl()): i.material-icons chevron_left
+
+        each element in $elements->render()
+            if is_string($element)
+                li.active: a(href="#!")= $element
+            if is_array($element)
+                each url, page in $element
+                    if $page == $paginator->currentPage()
+                        li.active: a(href="#!")= $page
+                    else
+                        li.waves-effect: a(href=$url)= $page
+
+        if $paginator->hasMorePages()
+            li.waves-effect
+                a(href=$paginator->nextPageUrl()): i.material-icons chevron_right
+        else
+            li.disabled
+                a(href="#!"): i.material-icons chevron_right

@@ -1,0 +1,25 @@
+extends layouts/main
+
+block title
+    | Восстановить пароль
+block h1
+    | Восстановить пароль
+
+block content
+    .row
+        if $errors->any()
+            .errors.card.red.white-text
+                .card-content
+                    each error in $errors->all()
+                        .error= $error
+        form.restore-form.col.s12.m6.offset-m3.card(method="POST")
+            .card-content
+                != csrf_field()
+                .card.teal.white-text
+                    .card-content Укажите адрес электронной почты, на который был зарегистрирован аккаунт. На данный адрес будет выслана инструкция дальнейших действий.
+                .row
+                    .input-field.col.s12
+                        input#email(name="email" type="text")
+                        label(for="email") E-mail
+                    .center
+                        button.btn.waves-effect.waves-light.blue(type="submit") Восстановить

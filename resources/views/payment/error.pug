@@ -1,0 +1,14 @@
+extends ../layouts/main
+
+block title
+    | Оплата заказа
+block h1
+    | Оплата заказа
+
+block content
+    form.card(method="POST")
+        != csrf_field()
+        .card-content.center-align
+            .row При оплате заказа произошла неизвестная ошибка. Попробуйте позже.
+            if $order->type == 1
+            	.row: a.btn(href=$order->entity_url) Перейти к туру

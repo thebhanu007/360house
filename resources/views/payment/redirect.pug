@@ -1,0 +1,21 @@
+extends ../layouts/main
+
+block title
+    | Оплата заказа
+block h1
+    | Оплата заказа
+
+block content
+    form#redirect.card(method="POST")
+        != csrf_field()
+        .card-content.center-align
+            .row: img(src=url('images/ripple.gif'))
+            .row Вы будете автоматически перенаправлены на страницу для оплаты. Если этого не произошло, нажмите на кнопку ниже.
+            .row: input.btn(type="submit" value="Перейти к оплате")
+
+    script.
+    	$(document).ready(function() {
+    		setTimeout(function() {
+    			$('form#redirect').submit();
+    		}, 3000);
+    	});

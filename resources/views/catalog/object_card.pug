@@ -1,0 +1,9 @@
+.col.xl2.m4.s6
+    a.card.object-card.hoverable(href=$object->url)
+        .card-image
+            .image(style="background-image: url(".$object->thumb."); background-position: 0px;" alt="")
+        .card-content
+            span.price= $object->print_price
+            span.name= $object->type_name.' '.$object->action_name
+            if $object->type == 1
+                span.rooms.grey-text= 'Комнаты: '.$object->rooms

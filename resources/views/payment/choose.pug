@@ -1,0 +1,28 @@
+extends ../layouts/main
+
+block title
+    | Оплата тура
+block h1
+    | Оплата тура
+
+block content
+    form.packs(method="POST")
+        != csrf_field()
+        .card.blue.white-text
+            .card-content: h5 1. Купить пакет панорам
+        .row
+            each pack in $packs
+                .col.s4
+                    .card.hoverable
+                        .card-content.center
+                            .card-title= $pack->name
+                            p.orange-text.center.amount= $pack->amount.' панорам'
+                            s.old-price.grey-text= $pack->old_price.' руб.'
+                            h5.price= $pack->price.' руб.'
+                        .card-action.center
+                            button.btn.blue.waves-effect.waves-light(value=$pack->id name="type" type="submit") Купить
+        .card.blue.white-text
+            .card-content: h5 2. Оплатить только панорамы данного тура
+        .card.hoverable
+            .card-content.clearfix Вы можете оплатить только панорамы вашего тура. Стоимость: #[strong= $object->unpaid_scenes * ENV('SCENE_COST')]р.
+                button.right.btn.blue.waves-effect.waves-light(value="scenes" name="type" type="submit") Оплатить

@@ -1,0 +1,20 @@
+extends ../layouts/main
+
+block title
+    | Настройки сайта
+
+block content
+    if $errors->any()
+        .errors.card.red.white-text
+            .card-content
+                each error in $errors->all()
+                    .error= error
+    form.options-form(method="POST" enctype="multipart/form-data")
+        != csrf_field()
+        .row
+            .input-field.col.s12
+                textarea#main-text.materialize-textarea(name="main_text")= old('main_text') ? old('main_text') : (\App\Option::get('main_text') ? \App\Option::get('main_text') : 'Текст на главной...')
+        .row.center
+            button.btn.waves-effect.waves-light.blue(type="submit") Сохранить
+    script
+        | CKEDITOR.replace('main-text');

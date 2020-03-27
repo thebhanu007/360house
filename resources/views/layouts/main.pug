@@ -1,0 +1,229 @@
+html
+    head
+        meta(charset="utf-8")
+        meta(name="csrf-token" content=csrf_token())
+        meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+        meta(name="description" content="Первый в России сайт по самостоятельному созданию виртуальных туров для продажи и аренды недвижимости.")
+        meta(property="og:title" content="Кругом Дом")
+        meta(property="og:description" content="Первый в России сайт по самостоятельному созданию виртуальных туров для продажи и аренды недвижимости.")
+        meta(property="og:image" content=url('images/logo.png'))
+        meta(property="og:type" content="article")
+        meta(property="og:locale" content="ru_RU")
+        meta(name="yandex-verification" content="4f26ba3a566a3419")
+        title: block title
+        link(rel="icon" type="image/png" href=url('favicon.png'))
+        link(rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons")
+        link(rel="stylesheet" type="text/css" href=url('css/materialize.min.css'))
+        link(rel="stylesheet" type="text/css" href=url('css/owl.carousel.min.css'))
+        link(rel="stylesheet" type="text/css" href=url('css/font-awesome.min.css'))
+        link(rel="stylesheet" type="text/css" href=url('css/pannellum.css'))
+        link(rel="stylesheet" type="text/css" href=url('css/app.css'))
+        script(src="https://api-maps.yandex.ru/2.1/?apikey=2fa495ca-d3b3-46cd-aecc-11ef7ac41e3e&lang=ru_RU")
+        script(async src="https://www.googletagmanager.com/gtag/js?id=UA-113164182-1")
+        script(src=url('js/jquery-3.2.1.min.js'))
+        script(src=url('js/materialize.min.js'))
+        script(src=url('js/owl.carousel.min.js'))
+        script(src=url('js/screenfull.min.js'))
+        script(src=url('js/jquery.pano.js'))
+        script(src=url('js/pannellum.js'))
+        script(src=url('ckeditor/ckeditor.js'))
+        script(src='https://www.google.com/recaptcha/api.js?hl=ru')
+        script(src=url('js/app.js'))
+        script.
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function() {
+                    try {
+                        w.yaCounter47252487 = new Ya.Metrika({
+                            id:47252487,
+                            clickmap:true,
+                            trackLinks:true,
+                            accurateTrackBounce:true,
+                            webvisor:true
+                        });
+                    } catch(e) { }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                    s = d.createElement("script"),
+                    f = function () { n.parentNode.insertBefore(s, n); };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else { f(); }
+            })(document, window, "yandex_metrika_callbacks");
+        noscript
+            div
+                img(src="https://mc.yandex.ru/watch/47252487" style="position:absolute; left:-9999px;" alt="")
+        style .async-hide { opacity: 0 !important}
+        script.
+            (function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+            h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+            (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+            })(window,document.documentElement,'async-hide','dataLayer',4000,
+            {'GTM-PV6H4N7':true});
+        script.
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-113164182-1', 'auto');
+            ga('require', 'GTM-PV6H4N7');
+            ga('send', 'pageview');
+        script.
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-113164182-1');
+    body
+        ul#slide-out.side-nav
+            li: a.waves-effect(href=url('contacts')) Контакты
+            li: a.waves-effect(href=url('help')) Помощь
+            if Auth::check()
+                li: .divider
+                li: a.waves-effect(href=route('objects')) Мои объявления
+                li: a.waves-effect(href=route('profile')) Мои данные
+                li: a.waves-effect(href=route('packs')) Купить пакет панорам
+                li: a.waves-effect(href=route('logout')) Выйти
+            else
+                li: a.waves-effect(href=route('login')) Личный кабинет
+            li: a.waves-effect.modal-trigger(href="#order-form") Заказать тур
+            li: a.waves-effect(href=route('partners')) Стать партнёром
+            if isAdmin
+                li: .divider
+                    li: a.subheader Администрирование
+                    li: a.waves-effect(href=route('objects')) Объекты
+                    li: a.waves-effect(href=route('admin.options')) Настройки
+                    li: a.waves-effect(href=route('admin.users.index')) Пользователи
+        header
+            ul#admin-dropdown.dropdown-content
+                li: a(href=route('objects')) Объекты
+                li: a(href=route('admin.options')) Настройки
+                li: a.waves-effect(href=route('admin.users.index')) Пользователи
+            ul#user-dropdown.dropdown-content
+                li: a(href=route('objects')) Мои объявления
+                li: a(href=route('profile')) Мои данные
+                li: a.waves-effect(href=route('packs')) Купить пакет панорам
+            ul#help-dropdown.dropdown-content
+                li: a(href=route('about')) О проекте
+                li: a(href="/help") Часто задаваемые вопросы
+                li: a.waves-effect.modal-trigger(href="#questioncontact-form") Cвязаться с нами
+            nav.blue
+                .nav-wrapper.row
+                    .col.s12
+                        a.button-collapse(href="#" data-activates="slide-out"): i.material-icons menu
+                        a.brand-logo(href=url('/'))
+                        ul.right.hide-on-med-and-down
+                            li: a(href=url('contacts')) Контакты
+                            //li: a(href=url('help')) Помощь
+                            li: a.dropdown-button(href="#" data-activates="help-dropdown" style="width: 250px; text-align: center;")
+                                i.material-icons.right
+                                Помощь
+                            if isAdmin
+                                li: a.dropdown-button(href="#" data-activates="admin-dropdown")
+                                    i.material-icons.right arrow_drop_down 
+                                    | Администрирование
+                            if Auth::check()
+                                li: a.dropdown-button(href="#" data-activates="user-dropdown")
+                                    i.material-icons.right arrow_drop_down 
+                                    = Auth::user()->name
+                                li: a(href=route('logout')) Выйти
+                            else
+                                li: a(href=route('login')) Личный кабинет
+                            li: a.waves-effect.waves-light.btn(href=route('object.create')) Создать объявление
+                            li: a.waves-effect.waves-light.btn.orange.darken-2.modal-trigger(href="#order-form") Заказать тур
+                            li: a.waves-effect.waves-light.btn.partner-button(href=route('partners')) Стать партнёром
+        block filter
+        main.container
+            if Session::has('message')
+                .card
+                    .card-content.green.white-text= Session::get('message')
+            h1
+                block h1
+            block content
+        footer.page-footer.blue
+            .container
+                .row
+                    .col.s12.m2
+                        a.brand-logo(href=url('/'))
+                    .col.s12.m4.social
+                        //- a.waves-effect.waves-light.btn-floating.blue.darken-2(href="#"): i.fa.fa-vk
+                        //- a.waves-effect.waves-light.btn-floating.blue.darken-2(href="#"): i.fa.fa-facebook
+                        //- a.waves-effect.waves-light.btn-floating.blue.darken-2(href="#"): i.fa.fa-instagram
+                        .mail
+                            .btn-floating.blue.darken-2
+                                i.fa.fa-envelope
+                            | admin@krugomdom.com
+                    .col.s12.m6.right-align.payment-logos
+                        img.visa(src=url('images/logo-visa.png'))
+                        img.mastercard(src=url('images/logo-mastercard.png'))
+                        img.mir(src=url('images/logo-mir.png'))
+                        img.tinkoff(src=url('images/logo-tinkoff.png'))
+            .footer-copyright
+                .container © 2018 Кругом Дом
+        #order-form.modal
+            .modal-content
+                form.row.ajax-form(method="POST" action="/order-form")
+                    != csrf_field()
+                    if isset($errors) && $errors->any()
+                        .errors.card.red.white-text
+                            .card-content
+                                each error in $errors->all()
+                                    .error= $error
+                    .input-field.col.l4.s12
+                        input#name(name="name" type="text" value=old('name'))
+                        label(for="name") Имя*
+                    .input-field.col.l4.s12
+                        input#second-name(name="second_name" type="text" value=old('second_name'))
+                        label(for="second-name") Отчество
+                    .input-field.col.l4.s12
+                        input#last-name(name="last_name" type="text" value=old('last_name'))
+                        label(for="last-name") Фамилия
+                    .input-field.col.l4.s12
+                        input#phone(name="phone" type="text" value=old('phone'))
+                        label(for="phone") Номер телефона*
+                    .input-field.col.l4.s12
+                        input#city(name="city" type="text" value=old('city'))
+                        label(for="city") Город*
+                    .input-field.col.l4.s12
+                        input#email(name="email" type="text" value=old('email'))
+                        label(for="email") E-Mail
+                    .input-field.col.s12
+                        input#skype(name="skype" type="text" value=old('skype'))
+                        label(for="skype") Skype
+                    //.clearfix.center-align
+                     //   .g-recaptcha(data-sitekey="6LeVQDIUAAAAAPwLSpa9psmjIZ5mPpDW3qn-Sk6p")
+                    .row.center
+                        input(type="hidden" name="order" value="1")
+                        button.btn.waves-effect.waves-light.blue(type="submit") Отправить
+        #questioncontact-form.modal
+            .modal-content
+                form.row.ajax-form(method="POST" action="/contact-form")
+                    != csrf_field()
+                    if isset($errors) && $errors->any()
+                        .errors.card.red.white-text
+                            .card-content
+                                each error in $errors->all()
+                                    .error= $error
+                    .input-field.col.s12
+                        input#c_name(name="name" type="text" value=old('name'))
+                        label(for="c_name") Имя*
+                    .input-field.col.s12
+                        input#c_contacts(name="contacts" type="text" value=old('contacts'))
+                        label(for="c_contacts") Контакты
+                    .input-field.col.s12
+                        input#c_email(name="email" type="text" value=old('email'))
+                        label(for="c_email") E-Mail
+                    .input-field.col.s12
+                        input#c_phone(name="phone" type="text" value=old('phone'))
+                        label(for="c_phone") Номер телефона*
+                    .input-field.col.s12
+                        textarea#question(name="question" type="text" value=old('question') style="border: unset; border-bottom: 1px solid #9e9e9e; max-width: 100%; min-width: 100%; min-height: 75px; max-height: 200px; outline:none;")
+                        label(for="question") Вопрос
+                    //.clearfix.center-align
+                     //   .g-recaptcha(data-sitekey="6LeVQDIUAAAAAPwLSpa9psmjIZ5mPpDW3qn-Sk6p")
+                    .row.center
+                        input(type="hidden" name="order" value="1")
+                        button.btn.waves-effect.waves-light.blue(type="submit" style="margin-top: 45px;") Отправить						

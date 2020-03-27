@@ -1,0 +1,21 @@
+extends ../layouts/main
+
+block title
+    | Купить пакет панорам
+block h1
+    | Купить пакет панорам
+
+block content
+    form.packs(method="POST")
+        != csrf_field()
+        .row
+            each pack in $packs
+                .col.s4
+                    .card.hoverable
+                        .card-content.center
+                            .card-title= $pack->name
+                            p.orange-text.center.amount= $pack->amount.' панорам'
+                            s.old-price.grey-text= $pack->old_price.' руб.'
+                            h5.price= $pack->price.' руб.'
+                        .card-action.center
+                            a.btn.blue.waves-effect.waves-lighta(href=route('packs.buy', ['id' => $pack->id])) Купить

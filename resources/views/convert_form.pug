@@ -1,0 +1,26 @@
+extends layouts/main
+
+block title
+    | Конвертация
+block h1
+    | Конвертация
+
+block content
+    .row
+        if $errors->any()
+            .errors.card.red.white-text
+                .card-content
+                    each error in $errors->all()
+                        .error= $error
+        form.convert-form.col.s12.m6.offset-m3.card(method="POST" enctype="multipart/form-data")
+            .card-content
+                != csrf_field()
+                .row
+                    .file-field.input-field
+                        .btn
+                            span Выбрать изображение
+                            input(type="file" name="image")
+                        .file-path-wrapper
+                            input.file-path.validate(type="text")
+                .row.right-align
+                    button.waves-effect.waves-light.btn(type="submit") Начать

@@ -1,0 +1,107 @@
+extends ../layouts/main
+
+block title
+    if ($object->action != 3)
+        = $object->city->name.' | '.$object->full_name
+    else
+        = 'Объект №'.$object->id
+
+block content
+    .object
+        if ($object->unpaid_scenes > 0 && Auth::check() && Auth::user()->id == $object->user_id)
+            .card.red.darken-1.white-text
+                .card-content.clearfix Данный тур имеет не оплаченные панорамы. 
+                    if $object->orders->count() && $object->orders->where('status', 1)->count()
+                        a.waves-effect.waves-light.btn.right(href=$object->orders->where('status', 1)->last()->link) Оплатить
+                    else
+                        a.waves-effect.waves-light.btn.right(href=route('pay.choose', ['id' => $object->id])) Оплатить
+                    a.waves-effect.waves-light.btn.right.blue.edit(href=route('object.edit', ['id' => $object->id])) Изменить тур
+        if ($object->expires_soon && Auth::check() && Auth::user()->id == $object->user_id)
+            .card.red.darken-1.white-text
+                .card-content.clearfix 
+                    if ($object->expires_in <= 0)
+                        | Срок активности данного объявления истёк. Через #{$object->deleted_in_string} объявление будет удалено.
+                    else
+                        | Срок активности данного объявления подходит к концу. Через #{$object->expires_in_string} объявление будет скрыто.
+                    a.waves-effect.waves-light.btn.right(href=route('pay.extend', ['id' => $object->id])) Оплатить
+        if ($object->action != 3)
+            h1= $object->full_name
+        else
+            h1= 'Объект №'.$object->id
+        .row
+            if ($object->action != 3)
+                .col.s12.price= $object->print_price
+                .col.s12.address.grey-text= $object->full_address
+            #tour.clearfix.col.s12
+                //a.fullscreen(href="#" title="На весь экран"): i.fa.fa-arrows-alt
+                #pano
+            .col.s12!= $img
+            if ($object->action != 3)
+                .col.s12
+                    .phone.center-align.card
+                        .card-content
+                            | Связаться с владельцем
+                            a.btn.blue(href="#" data-id=$object->id data-url=route('object.phone', ['id' => $object->id])) Показать телефон
+				
+                .description.s12.col.l8.xl9
+                    h5!= $object->type_name.', '.$object->print_size.', '.$object->floor.' эт.'
+                    h6!= $object->description
+                .info.s12.col.l4.xl3
+                    h5 Информация
+                    .price Цена: 
+                        span.value= $object->print_price
+                    .type Тип: 
+                        span.value= $object->type_name
+                    if ($object->type != 2)
+                        .rooms Комнаты: 
+                            span.value= $object->rooms
+                    if $object->floor
+                        .floor Этаж: 
+                            span.value= $object->floor
+                                = $object->floors ? '/'.$object->floors : ''
+                    if $object->material
+                        .floor Материал здания: 
+                            span.value= $object->material_name
+                    .size Площадь: 
+                        span.value!= $object->print_size
+                    .updated-at Дата обновления объявления: 
+                        span.value= $object->updated_at->format('d.m.Y')
+                    .created-at Дата публикации объявления: 
+                        span.value= $object->created_at->format('d.m.Y')
+                .col.s12= $object->getDocuments()					
+                h5.col.s12 Расположение
+                .col.s12.address= $object->address.', '.$object->city->name
+                input#longitude(type="hidden" name="longitude" value=$object->longitude)
+                input#latitude(type="hidden" name="latitude" value=$object->latitude)
+                .col.s12
+                    #map
+    script(src=url('js/map.js'))
+    script(src=url('js/pano/'.$object->id))
+    .row
+        .col.s12.right-align
+            a.btn.waves-effect.waves-light.red.btn-small.modal-trigger(href="#report-form") Пожаловаться
+    #report-form.modal
+        .modal-content
+            form.row.ajax-form(method="POST" action="/report-form")
+                != csrf_field()
+                if isset($errors) && $errors->any()
+                    .errors.card.red.white-text
+                        .card-content
+                            each error in $errors->all()
+                                .error= $error
+                .input-field.col.s12
+                    textarea#report.materialize-textarea(name="report" type="text" value=old('report'))
+                    label(for="report") Сообщение*
+                .input-field.col.l6.s12
+                    input#name(name="name" type="text" value=old('name'))
+                    label(for="name") Ваше имя
+                .input-field.col.l6.s12
+                    input#email(name="email" type="text" value=old('email'))
+                    label(for="email") E-Mail
+                //.clearfix.center-align
+                //    .g-recaptcha(data-sitekey="6LeVQDIUAAAAAPwLSpa9psmjIZ5mPpDW3qn-Sk6p")
+                .row.center
+                    input(type="hidden" name="object_id" value=$object->id)
+                    button.btn.waves-effect.waves-light.blue(type="submit") Отправить
+    if ($object->action != 3)
+        include ../modules/new_objects

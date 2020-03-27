@@ -1,0 +1,63 @@
+extends ../layouts/main
+
+block title
+    | Все объекты
+
+block content
+    if (Auth::user()->isAdmin())
+        form.card
+            .card-content.clearfix
+                .row
+                    .col.input-field.m4.s12
+                        select#city(name="city")
+                            option(value="") Выбрать город...
+                            each city in $cities
+                                option(value=$city->id selected=(Request::input('city') == $city->id))= $city->name
+                    .col.input-field.m2.s12
+                        input#id(type="text" name="id" value=Request::input('id'))
+                        label(for="id") ID тура
+                    .col.input-field.m6.s12.right-align
+                        button.blue.btn.waves-effect.waves-light(type="submit") Найти
+    table.striped.admin-objects
+        thead
+            th ID
+            th Адрес
+            th Осталось оплаченных дней
+            if (Auth::user()->isAdmin())
+                th Платные панорамы
+                th Неоплаченые панорамы
+            th Дней до удаления
+            th 
+        tbody
+            each object in $objects
+                tr
+                    td= $object->id
+                        .modal.embed-code
+                            .modal-content
+                                .input-field
+                                    div Вставте данный код на свою страницу
+                                    input(type="text" value='<iframe src="'.route('objects.embed', ['id' => $object->id]).'" style="border: 0; width: 1920px; height: 1080px; max-width: 100%; max-height: 100%; overflow: hidden"></iframe>')
+                            .modal-footer
+                                a.modal-action.modal-close.waves-effect.waves-green.btn-flat.close Скрыть
+                    td
+                        a(href=$object->url)
+                            if $object->action != 3
+                                = $object->city->name.', '.$object->address
+                            else
+                                = 'Объект №'.$object->id
+                    td= $object->expires_in_string
+                    if (Auth::user()->isAdmin())
+                        td= $object->scenes->count() - 2
+                        td= $object->unpaid_scenes
+                    td= $object->deleted_in
+                    td.right-align.actions
+                        a.btn-floating.blue.waves-effect.waves-light.show-embed(href="#" title="Вставить на сайт"): i.material-icons code
+                        a.btn-floating.blue.waves-effect.waves-light(href=route('object.edit', ['id' => $object->id]) title="Изменить"): i.material-icons mode_edit
+                        form(method="POST" action=route('objects.destroy', ['id' => $object->id]))
+                            != csrf_field()
+                            input(type="hidden" name="_method" value="DELETE")
+                            button.btn-floating.waves-effect.waves-light.red(title="Удалить"): i.material-icons delete
+            tr
+                td.right-align(colspan="4")
+                    a.btn.blue.waves-effect.waves-light(href=route('object.create')) Создать
+    != $objects->links('modules.pagination')

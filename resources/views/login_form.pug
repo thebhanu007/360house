@@ -1,0 +1,31 @@
+extends layouts/main
+
+block title
+    | Войти в систему
+block h1
+    | Войти в систему
+
+block content
+    .row
+        if $errors->any()
+            .errors.card.red.white-text
+                .card-content
+                    each error in $errors->all()
+                        .error= $error
+        form.login-form.col.s12.m4.offset-m4.card(method="POST")
+            .card-content
+                != csrf_field()
+                .row
+                    .input-field.col.s12
+                        input#login(name="login" type="text")
+                        label(for="login") Логин или E-mail
+                    .input-field.col.s12
+                        input#password(name="password" type="password")
+                        label(for="password") Пароль
+                    .center
+                        button.btn.waves-effect.waves-light.blue(type="submit") Войти
+                .row
+                    .col.s6
+                        a(href=route('restore')) Восстановить пароль
+                    .col.s6.right-align
+                        a(href=route('register')) Зарегистрироваться

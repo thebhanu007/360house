@@ -1,0 +1,64 @@
+extends ../layouts/main
+
+block title
+    | Стать партнёром
+
+block content
+    .card.feedback
+        .card-content
+            h1.no-margin Стать партнёром
+            iframe(width="800" height="480" src="https://www.youtube.com/embed/7QWvsy49NLE?rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen)
+            | Приветствую вас, будущие партнёры.
+            br
+            | Хочу рассказать вам о том, как с помощью нашего сайта вы можете легко и прибыльно заработать на создании виртуальных туров недвижимости. Для этого вам не нужна дорогая аппаратура или глубокие познания в этой области. Кругом Дом сделал создание тура максимально простым.
+            br
+            | Всё что вам потребуется для того, чтобы зарабатывать хорошие деньги – это камера 360° и монопод. Если у вас или ваших друзей нет данной техники, то вложения составят около 9 000р при том, что всегда можно вернуть вложения продав данный популярный товар через объявления в интернете.
+            br
+            | Ваши потенциальные клиенты, это все собственники и арендаторы недвижимости, а также все связанные с этим сферы. Рекомендуем сразу предложить услугу создания и размещения виртуальных туров агентствам недвижимости (риелторам) в вашем городе. Если у всех риелторов будет ваша визитка, то вы будите загружены работой и всегда при деньгах. Когда клиент связывается с вами и заказывает данную услугу, то вы приезжаете на объект и проводите съемку. Отсняв объект, перейдите на сайт и создайте учетную запись для клиента, в этой записи создаёте тур из отснятого материала и передаёте логин и пароль от учетной записи клиенту предварительно получив оплату.
+            br
+            | Вам не нужно думать о дальнейшем хранении и поддержки созданного тура, всё на себя берёт сайт. Ваша задача только отснять объект недвижимости, создать виртуальный тур, получить деньги. Рекомендуемый диапазон цен на съемку и создание тура (500р.-2000р.)  Не завышайте цены в ущерб спросу. Помните старую английскую поговорку лучше зарабатывать фунт в день, чем два в неделю.
+            br
+            | Привилегии представителя компании Кругом дом:
+            br
+            | ► Бесплатное создание и размещение виртуальных туров на krugomdom.com
+            br
+            | ► Полное сопровождение и консультация по всем аспектам работы.
+            br
+            | ► Бесплатное создание макета для ваших визиток представителя.
+            br
+            br
+            | Для того, чтобы стать нашим партнёром и получить более подробную информацию, заполните форму обратной связи.
+            .row
+                form.card.col.l10.offset-l1.xl8.offset-xl2.s12(method="POST")
+                    != csrf_field()
+                    .card-content.clearfix
+                        if $errors->any()
+                            .errors.card.red.white-text
+                                .card-content
+                                    each error in $errors->all()
+                                        .error= $error
+                        .input-field.col.l4.s12
+                            input#name(name="name" type="text" value=old('name'))
+                            label(for="name") Имя*
+                        .input-field.col.l4.s12
+                            input#second-name(name="second_name" type="text" value=old('second_name'))
+                            label(for="second-name") Отчество
+                        .input-field.col.l4.s12
+                            input#last-name(name="last_name" type="text" value=old('last_name'))
+                            label(for="last-name") Фамилия
+                        .input-field.col.l4.s12
+                            input#phone(name="phone" type="text" value=old('phone'))
+                            label(for="phone") Номер телефона*
+                        .input-field.col.l4.s12
+                            input#city(name="city" type="text" value=old('city'))
+                            label(for="city") Город*
+                        .input-field.col.l4.s12
+                            input#email(name="email" type="text" value=old('email'))
+                            label(for="email") E-Mail
+                        .input-field.col.s12
+                            input#skype(name="skype" type="text" value=old('skype'))
+                            label(for="skype") Skype
+                        //.clearfix.center-align
+                        //    .g-recaptcha(data-sitekey="6LeVQDIUAAAAAPwLSpa9psmjIZ5mPpDW3qn-Sk6p")
+                        .row.center
+                            button.btn.waves-effect.waves-light.blue(type="submit") Отправить
